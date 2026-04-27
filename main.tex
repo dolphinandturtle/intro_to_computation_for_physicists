@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\title{Introduction to Computing for Physicists}
+\author{Alessandro Rayan Ahmed}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  A brief overview of the general ideas of computing. A practical guide for
+  learning a language efficiently, focusing on the \textit{C} programming
+  language. A sweep of programming knowledge to improve algorithms.
+\end{abstract}
+
+
+\begin{itemize}
+\item An \textbf{operation} is involved for the change of \textit{data/information}.
+\item An \textbf{algorithm} is a \textit{static} set of rules.
+\item A \textbf{process} is the \textit{dynamics} emerging from applying the set of rules.
+\end{itemize}
+
+\section{Flux diagrams}
+The flux-diagram is a convenient tool for \textit{designing} an
+algorithm because the flow of the program is made explicit with
+the directions of the arrows pointing.
+
+\section{Positional numbering system}
+\subsection{Integers}
+The value of each digit depends on its position.
+\begin{itemize}
+\item $b$ represents the \textit{basis} of the system.
+\item $\Gamma$ is the system's \textit{alphabet}, it must contain $b$ number of symbols.
+\item $d_i \in \Gamma$ represents the digit in the i-th \textit{position}.
+\end{itemize}
+
+Big endian vs. small endian
+\begin{equation}
+  \label{eq:positional-representation}
+  \begin{gathered}
+    (D_nD_{n-1}\cdots D_0)_b \equiv \sum_{i=1}^n D_ib^i = D_0 \cdot b^0 + D_1 \cdot b^1 + \dots + D_n \cdot b^n \\
+    (d_0d_1\cdots d_n)_b \equiv \sum_{i=1}^n d_ib^i = d_0 \cdot b^0 + d_1 \cdot b^1 + \dots + d_n \cdot b^n
+  \end{gathered}
+\end{equation}
+
+\begin{itemize}
+\item $\Gamma_{\text{hex}} = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \text{a}, \text{b}, \text{c}, \text{d}, \text{e}, \text{f})$
+\item $\Gamma_{\text{dec}} = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)$
+\item $\Gamma_{\text{oct}} = (0, 1, 2, 3, 4, 5, 6, 7)$
+\item $\Gamma_{\text{bin}} = (0, 1)$
+\end{itemize}
+
+\begin{center}
+  \begin{tabular}{|r|r|r|r|}
+    \hline
+    Hexadecimal & Decimal & Octal & Binary \\
+    \hline
+    $0_{\text{hex}}$ & $0_{\text{dec}}$ & $0_{\text{oct}}$ & $0_{\text{bin}}$ \\
+    $1_{\text{hex}}$ & $1_{\text{dec}}$ & $1_{\text{oct}}$ & $1_{\text{bin}}$ \\
+    $2_{\text{hex}}$ & $2_{\text{dec}}$ & $2_{\text{oct}}$ & $10_{\text{bin}}$ \\
+    $3_{\text{hex}}$ & $3_{\text{dec}}$ & $3_{\text{oct}}$ & $11_{\text{bin}}$ \\
+    $4_{\text{hex}}$ & $4_{\text{dec}}$ & $4_{\text{oct}}$ & $100_{\text{bin}}$ \\
+    $5_{\text{hex}}$ & $5_{\text{dec}}$ & $5_{\text{oct}}$ & $101_{\text{bin}}$ \\
+    $6_{\text{hex}}$ & $6_{\text{dec}}$ & $6_{\text{oct}}$ & $110_{\text{bin}}$ \\
+    $7_{\text{hex}}$ & $7_{\text{dec}}$ & $7_{\text{oct}}$ & $111_{\text{bin}}$ \\
+    $8_{\text{hex}}$ & $8_{\text{dec}}$ & $10_{\text{oct}}$ & $1000_{\text{bin}}$ \\
+    $9_{\text{hex}}$ & $9_{\text{dec}}$ & $11_{\text{oct}}$ & $1001_{\text{bin}}$ \\
+    $\text{a}_{\text{hex}}$ & $10_{\text{dec}}$ & $12_{\text{oct}}$ & $1010_{\text{bin}}$ \\
+    $\text{b}_{\text{hex}}$ & $11_{\text{dec}}$ & $13_{\text{oct}}$ & $1011_{\text{bin}}$ \\
+    $\text{c}_{\text{hex}}$ & $12_{\text{dec}}$ & $14_{\text{oct}}$ & $1100_{\text{bin}}$ \\
+    $\text{d}_{\text{hex}}$ & $13_{\text{dec}}$ & $15_{\text{oct}}$ & $1101_{\text{bin}}$ \\
+    $\text{e}_{\text{hex}}$ & $14_{\text{dec}}$ & $16_{\text{oct}}$ & $1110_{\text{bin}}$ \\
+    $\text{f}_{\text{hex}}$ & $15_{\text{dec}}$ & $17_{\text{oct}}$ & $1111_{\text{bin}}$ \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Rationals}
+\paragraph{Fixed-point representation}
+\paragraph{Mobile-point representation}
+\paragraph{IEEE 754}
+Sign mantissa significand
+
+\section{Turing machines}
+
+\end{document}
