@@ -2,10 +2,13 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{graphicx}
+\usepackage{wrapfig}
 \usepackage{hyperref}
 \usepackage{minted}
 \usepackage{xcolor}
+\usepackage{caption}
 
+\graphicspath{{build/media/}}
 \definecolor{grey}{rgb}{.95, .95, .95}
 \definecolor{mygreen}{rgb}{.6 .95 .1}
 \pagecolor{yellow!4}
@@ -121,16 +124,187 @@ typical scheme for how computers execute code.
   ELSESTOP
 \end{minted}
 
+\pagebreak
+
 \subsection{Flow patterns}
 The flow of a program is a very important aspect to understand its behaviour,
-all useful programs have a source-sink aspect to them, all arrows beging from
+all useful programs have a source-sink aspect to them, all arrows begin from
 a source and they must all end in a sink at some point.
 
+\noindent
+\begin{minipage}{0.5\textwidth}
+  \vspace{1cm}
+  \includegraphics[width=\textwidth]{flow-if-else.png}
+  \captionof{figure}{This is an \textbf{if-else} pattern, it starts from $C$.}
+  \label{fig:flow-if-else}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.4\textwidth}
+  The \textit{if-else} pattern \underline{conserves} the tree structure of the program.
+  If $1$ and $2$ are halting programs than the whole tree will halt.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    if (C) {
+      // 1
+    }
+    else {
+      // 2
+    }
+  \end{minted}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.4\textwidth}
+  \vspace{1cm}
+  The \textit{if-elseif} pattern is a pattern extension of the \textit{if-else} pattern.
+  It \underline{conserves} the tree structure of the program.
+  If $1 \cdots n$ are halting programs than the whole tree will halt.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    if (1) {
+      // 1
+    }
+    else if (...) {
+      // ...
+    }
+    else {
+      // N
+    }
+  \end{minted}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{flow-if-elseif.png}
+  \captionof{figure}{This is an \textbf{if-elseif} pattern, it starts from $C$.}
+  \label{fig:flow-if-elseif}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.5\textwidth}
+  \vspace{1cm}
+  \includegraphics[width=\textwidth]{flow-if.png}
+  \captionof{figure}{This is a free \textbf{if} pattern, it starts from $C$.}
+  \label{fig:flow-if}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.4\textwidth}
+  The \textit{free if} pattern is a \underline{reduction} of an \textit{if-else} pattern.
+  If $1 \otimes 2$ and $2$ halts than the whole tree will halt
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    if (C) {
+      // 1
+    }
+    // 2
+  \end{minted}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.4\textwidth}
+  \vspace{1cm}
+  The \textit{while} pattern is guaranteed to halt
+  if the condition $C$ has an \textit{upper-bound}
+  check as a logical conjunction and is a function
+  of a \textit{strictly increasing} value (the same
+  is true for a lower-bound with a stricly decreasing
+  value).
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    while (C) {
+      // B
+    }
+  \end{minted}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{flow-while.png}
+  \captionof{figure}{This is \textbf{while} pattern, it starts from $C$.}
+  \label{fig:flow-while}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.5\textwidth}
+  \vspace{1cm}
+  \includegraphics[width=\textwidth]{flow-do-while.png}
+  \captionof{figure}{This is a \textbf{do-while} pattern, it starts from $C$.}
+  \label{fig:flow-do-while}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.4\textwidth}
+  The \textit{do-while} pattern exhibits the same
+  halting behaviour as the \textit{while} pattern;
+  the difference is that the \textit{body} of the
+  loop $B$ will always resolve \underline{at least}
+  once.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    do {
+      // B
+    } while (C);
+  \end{minted}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.4\textwidth}
+  \vspace{1cm}
+  The \textit{for} pattern exhibits the same
+  halting behaviour as the \textit{while} pattern;
+  in addition if $C \otimes B = C \oplus B$ then
+  the strictly increasing/decreasing value is
+  controlled by $IT$.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    for (IN; C; IT) {
+      // B
+    }
+  \end{minted}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{flow-for.png}
+  \captionof{figure}{This is \textbf{for} pattern, it starts from $IN$.}
+  \label{fig:flow-for}
+\end{minipage}
+
+\paragraph{Reductions}
+
+\pagebreak
+
 \subsection{Exercises}
+For the following exercises read the instructions, draw the flow diagram,
+apply reductions if needed and implement the solution in C syntax.
+
 \paragraph{Scale a row}
+Given a row of floats $R[n]$ of size $n$ and a factor $fac$, implement a program
+to scale each column entry by the same factor (row scaling)
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_scale(int n, float R[n], float fac);
+\end{minted}
+
 \paragraph{Add a row}
+Given a two rows of floats $R0[n]$ and $R1[n]$ of size $n$ and a factor $fac$,
+implement a program that adds together adjacent columns of $R0[n]$ and $R1[n]$
+the latter being scaled by a factor of $fac$.
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_add(int n, float R0[n], float R1[n], float fac);
+\end{minted}
+
 \paragraph{Swap a row}
+
 \paragraph{Print a matrix}
+Given a matrix $M[m][n]$ of size $m \times n$, implement a program that prints
+the matrix onto the screen.
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void matrix_print(int m, int n, float M[m][n]);
+\end{minted}
+keep in mind that to print something like
+\begin{minted}[bgcolor=mygreen!10]{text}
+  [1.00 6.67]
+  [3.14 6.96]
+\end{minted}
+the code is the following
+\begin{minted}[bgcolor=mygreen!10]{c}
+  printf("[%.2f ", 1.00);
+  printf("%.2f]\n", 6.67);
+  printf("[%.2f ", 3.14);
+  printf("%.2f]\n", 6.69);
+\end{minted}
+
+\pagebreak
 
 \subsection{Solutions}
 \paragraph{Scale a row}
@@ -183,6 +357,7 @@ a source and they must all end in a sink at some point.
   }
 \end{minted}
 
+\pagebreak
 
 \subsection{Row reduction algorithm}
 The row reduction (also know as gaussian elimination) algorithm, is used to
@@ -209,43 +384,6 @@ kernel. This algorithm is used to solve linear systems of equations.
     row_reduction(3, 4, M);
     matrix_print(3, 4, M);
     return 0;
-  }
-\end{minted}
-
-\begin{minted}[bgcolor=mygreen!10]{c}
-  #include <assert.h>
-
-  void row_reduction(int m, int n, float M[m][n]) {
-    main:
-    if (M[0][0] != 0) {
-      reduction:
-      row_scale(n, M, 1/M[0][0]);
-      for (int i = 1; i < m; i = i + 1) {
-        row_add(n, M[i], M[0], M[i][0]);
-      }
-      if (m > 1) {
-        assert(0 & "Skip the current starting row?");
-        goto main;
-      }
-      else {
-        return;
-      }
-    }
-    else {
-      if (exists_row_nonzero(m, n, M)) {
-        row_swap_nearest_zero(m, n, M);
-        goto reduction;
-      }
-      else {
-        if (n > 1) {
-          assert(0 & "Skip the current starting column?");
-          goto main;
-        }
-        else {
-          return;
-        }
-      }
-    }
   }
 \end{minted}
 
@@ -285,7 +423,6 @@ kernel. This algorithm is used to solve linear systems of equations.
     }
   }
 \end{minted}
-
 
 \pagebreak
 
@@ -327,102 +464,53 @@ it introduces a hanging terminating condition (which shouldn't resolve but is
 still considered bad practice). It is better to remove it all together and
 adjust it so that the improved \ref{fig:flow-diagram-formal-1}
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
   \includegraphics[height=.9\textheight]{row-reduction-diagram-formal.png}
   \caption{Formalized diagram of the previous row reduction algorithm implementation.}
   \label{fig:flow-diagram-formal}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
   \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-1.png}
   \caption{Formalized diagram of the previous row reduction algorithm implementation.}
   \label{fig:flow-diagram-formal-1}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
   \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-2.png}
   \caption{Formalized diagram of the previous row reduction algorithm implementation.}
   \label{fig:flow-diagram-formal-2}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
   \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-3.png}
   \caption{Formalized diagram of the previous row reduction algorithm implementation.}
   \label{fig:flow-diagram-formal-3}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
   \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-4.png}
   \caption{Formalized diagram of the previous row reduction algorithm implementation.}
   \label{fig:flow-diagram-formal-4}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
   \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-5.png}
   \caption{Formalized diagram of the previous row reduction algorithm implementation.}
   \label{fig:flow-diagram-formal-5}
 \end{figure}
 
-\begin{minted}[bgcolor=mygreen!10]{c}
-  void row_reduction(int m, int n, float M[m][n]) {
-    int oi = 0;
-    int oj = 0;
-    while (oi < m && oj < n) {
-      // Pivot index
-      int pi = oi;
-      while (M[pi][oj] == 0.0) {
-        if (pi < m) {
-          pi = pi + 1;
-        }
-        else {
-          oj = oj + 1;
-          if (oj < n) {
-            pi = oi;
-          }
-          else {
-            return;
-          }
-        }
-      }
-      // Normalize
-      for (int j = oj; j < m; j = j + 1) {
-        M[pi][j] = M[pi][j] / M[pi][oj];
-      }
-      // Clip
-      for (int i = pi; i < m; i = i + 1) {
-        for (int j = oj; j < n; j = j + 1) {
-          M[i][j] = M[i][j] - M[i][oj]*M[pi][j];
-        }
-      }
-      if (pi != oi) {
-        float tmp = 0.0;
-        // Starts swapping from the offset because
-        // entries preceding it are equal to zero
-        // amongst previous rows.
-        for (int j = oj; j < m; j = j + 1) {
-          tmp = M[oi][j];
-          M[oi][j] = M[pi][j];
-          M[pi][j] = tmp;
-        }
-      }
-      oi = oi + 1;
-      oj = oj + 1;
-    }
-  }
-\end{minted}
-
 \pagebreak
 
 \begin{minted}[bgcolor=mygreen!10]{c}
   void row_reduction(const int m, const int n, float M[m][n]) {
     for (
-      // Offset row, offset column and pivot row.
       int oi = 0, oj = 0, pi = oi;
       (oi < m && oj < n);
       {oi++; oj++; pi = oi;}
@@ -466,6 +554,13 @@ adjust it so that the improved \ref{fig:flow-diagram-formal-1}
     */
   }
 \end{minted}
+
+\section{Data representation and ordering}
+\subsection{Integers}
+\subsection{Decimals}
+\subsection{Fixed point and floating point}
+\subsection{Arrays}
+\subsection{Scope and pointers}
 
 \section{Biblio}
 \begin{itemize}
