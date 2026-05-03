@@ -1,0 +1,476 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{xcolor}
+
+\definecolor{grey}{rgb}{.95, .95, .95}
+\definecolor{mygreen}{rgb}{.6 .95 .1}
+\pagecolor{yellow!4}
+
+\title{Introduction to computing for physicists}
+\author{Your dearest, green}
+
+\begin{document}
+\maketitle
+
+\pagebreak
+
+\section{Introduction}
+\paragraph{Installation}
+Create a file on your computer named ``main.c'',
+inside your are going to write the following:
+\begin{minted}[bgcolor=mygreen!10]{c}
+  #include <stdio.h>
+
+  int main(void) {
+    printf("Hello Seamen!\n");
+    return 0;
+  }
+\end{minted}
+now open a \textit{terminal/shell} of your choice
+to \textit{compile} and \textit{run} the ``main.c''
+file with the following:
+\begin{minted}[bgcolor=mygreen!10]{bash}
+  # I am on Linux and use 'gcc' depending
+  # on your operating system you may need
+  # to use something else.
+  gcc -o main.c main
+  ./main
+\end{minted}
+if the phrase ``Hello Seamen!'' appeared on your
+terminal its good, you can move to the next paragraph.
+If nothing happened make sure everything has been properly
+written, if an error occurs \textit{google} ``How to install
+C compiler on Windows/Mac/Linux'' or ask a trusted friend to
+do so for you. Repeat this process until the
+desired result has been reached.
+
+\paragraph{Pre-requisites}
+In order to move to the next chapter it is required
+to understand the behaviour of the following program
+without any external help:
+\begin{minted}[bgcolor=mygreen!10]{c}
+  // 'int' is an abbreviation for integer
+  // '=' is an assignment, translate it with 'set to'
+  int factorial(int n) {
+    int x = 1;
+    loop:
+    if (n > 0) {
+      x = x * n;
+      n = n - 1;
+      goto loop;
+    }
+    else {
+      return x;
+    }
+  }
+\end{minted}
+Can you guess the \textit{return} value of $x$ if $n = 5$?
+If you understood the code correctly it should be $x = 120$.
+
+\pagebreak
+
+\section{Program representation}
+
+\subsection{Flow diagram representation}
+The rules for the representation of a flow diagram are the following,
+right after, a familiar diagram is shown.
+\begin{itemize}
+\item Circles indicate insertion and termination points,
+  respectively named ``start'' and ``end''.
+\item Slanted parallelograms indicate insertion variables
+  also known as \textbf{input} and termination variables also
+  know as \textbf{output}.
+\item Rhombi are \textbf{conditionals} their \underline{exit flow is not fixed},
+  its a function of their inner state.
+  For our purposes the possible exit flows are \textit{two}, one if the condition
+  \underline{is} satisfied and another one if it \underline{is not}.
+\item Rectangles are \textbf{procedures}, their \underline{exit flow is fixed}.
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{flow-diagram-example.png}
+  \caption{
+    This is the flow diagram of the ``factorial'' program
+    previously shown.
+  }
+  \label{fig:flow-diagram-example}
+\end{figure}
+
+\subsection{Procedural representation}
+There are no more arrows, each line is executed in order
+from top to bottom up until an \textit{indirection} command
+such as ``GOTO'' which diverts the next execution to a
+special line marked with a ``FLAG'' statement. This is a
+typical scheme for how computers execute code.
+\begin{minted}[bgcolor=mygreen!10]{text}
+  START n
+  SETTO x 1
+  FLAG LOOP
+  IFSTART GREATERTHAN n 0
+  SETTO x PRODUCT x n
+  SETTO n SUBTRACTION n 1
+  GOTO LOOP
+  IFSTOP
+  ELSESTART
+  STOP x
+  ELSESTOP
+\end{minted}
+
+\subsection{Flow patterns}
+The flow of a program is a very important aspect to understand its behaviour,
+all useful programs have a source-sink aspect to them, all arrows beging from
+a source and they must all end in a sink at some point.
+
+\subsection{Exercises}
+\paragraph{Scale a row}
+\paragraph{Add a row}
+\paragraph{Swap a row}
+\paragraph{Print a matrix}
+
+\subsection{Solutions}
+\paragraph{Scale a row}
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_scale(int n, float R[n], float fac) {
+    for (int j = 0; j < n; j = j + 1) {
+      R[j] = fac * R[j];
+    }
+    return;
+  }
+\end{minted}
+
+\paragraph{Add a row}
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_add(int n, float R0[n], float R1[n], float fac) {
+    for (int j = 0; j < n; j = j + 1) {
+      R0[j] = R0[j] + fac * R1[j];
+    }
+    return;
+  }
+\end{minted}
+
+\paragraph{Swap a row}
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_swap(int n, float R0[n], float R1[n]) {
+    float tmp = 0.0;
+    for (int j = 0; j < n; j = j + 1) {
+      tmp = R0[j];
+      R0[j] = R1[j];
+      R1[j] = tmp;
+    }
+    return;
+  }
+\end{minted}
+
+\paragraph{Print a matrix}
+\begin{minted}[bgcolor=mygreen!10]{c}
+  #include <stdio.h>
+
+  void matrix_print(int m, int n, float M[m][n]) {
+    for (int i = 0; i < m; i = i + 1) {
+      printf("[");
+      for (int j = 0; j < n - 1; j = j + 1) {
+        printf("%.2f ", M[i][j]);
+      }
+      printf("%.2f]\n", M[i][n-1]);
+    }
+    printf("\n");
+    return;
+  }
+\end{minted}
+
+
+\subsection{Row reduction algorithm}
+The row reduction (also know as gaussian elimination) algorithm, is used to
+modify the form of a matrix into upper triangular without modifying its
+kernel. This algorithm is used to solve linear systems of equations.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{flow-diagram-informal.png}
+  \caption{
+    This is the (informal) flow diagram of the row-reduction
+    algorithm for matrices.
+  }
+  \label{fig:flow-diagram-informal}
+\end{figure}
+
+\paragraph{Implementation}
+\begin{minted}[bgcolor=mygreen!10]{c}
+  int main(void) {
+    float M[3][4] = {
+      {0, 2, 3, 4},
+      {1, 7, 7, 7},
+      {9, 8, 7, 0}
+    };
+    row_reduction(3, 4, M);
+    matrix_print(3, 4, M);
+    return 0;
+  }
+\end{minted}
+
+\begin{minted}[bgcolor=mygreen!10]{c}
+  #include <assert.h>
+
+  void row_reduction(int m, int n, float M[m][n]) {
+    main:
+    if (M[0][0] != 0) {
+      reduction:
+      row_scale(n, M, 1/M[0][0]);
+      for (int i = 1; i < m; i = i + 1) {
+        row_add(n, M[i], M[0], M[i][0]);
+      }
+      if (m > 1) {
+        assert(0 & "Skip the current starting row?");
+        goto main;
+      }
+      else {
+        return;
+      }
+    }
+    else {
+      if (exists_row_nonzero(m, n, M)) {
+        row_swap_nearest_zero(m, n, M);
+        goto reduction;
+      }
+      else {
+        if (n > 1) {
+          assert(0 & "Skip the current starting column?");
+          goto main;
+        }
+        else {
+          return;
+        }
+      }
+    }
+  }
+\end{minted}
+
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_reduction(int m, int n, float M[m][n]) {
+    int oi = 0;
+    int oj = 0;
+    main:
+    if (M[oi][oj] != 0) {
+      reduction:
+      row_scale(n, M, 1/M[oi][oj]);
+      for (int i = oi + 1; i < m; i = i + 1) {
+        row_sub(n, M[i], M[oi], M[i][oj]);
+      }
+      if (oi < m) {
+        oi = oi + 1;
+        goto main;
+      }
+      else {
+        return;
+      }
+    }
+    else {
+      if (exists_row_nonzero(m, n, M)) {
+        row_swap_nearest_zero(m, n, M);
+        goto reduction;
+      }
+      else {
+        if (oj < n) {
+          oj = oj + 1;
+          goto main;
+        }
+        else {
+          return;
+        }
+      }
+    }
+  }
+\end{minted}
+
+
+\pagebreak
+
+\paragraph{Optimizations}
+After going through the hastle of translating the abstract algorithm
+represented by a diagram into the C language syntax and verifying
+its expected behaviour, one might be left unsatisfied and have some
+of these questions in mind:
+\begin{itemize}
+\item
+  \textit{The diagram is very simple, the code is very ugly. But it works
+  great without any problems so its fine right?} It is until it isn't.
+  Computer science tells us that there is no way of catching certain
+  errors prior to running the program. Ergo write everything with the
+  intention of making it easier to fix when it will break.
+\item
+  \textit{What has been just done can be applied to any language. Is the only
+  advantage of C that of making it faster?}
+  Although the fastest programs are written in C, that doesn't imply that
+  writing any program in C will make it fast.
+  The sole dictator of a program's speed is the hardware and the algorithm.
+  The race between languages is a race where everyone gets the same car and
+  are is only allowed to remove things from it. The C language doesn't care
+  about its driver's well being (you), it just wants to win the race:
+  no carpets, no seats, no airbags, no safety, no spedometer...
+  If you are the best driver you will definitely win the race, otherwise
+  you will just die (the program won't run and that will make you want
+  to be not so nice towards yourself and other).
+\item
+  \textit{If my focus isn't performance is it worth learning C?}
+  Yes it is. Following the previous answer, it has no other structure other
+  than the absolutely necessary one.
+\end{itemize}
+
+In the implementation diagram \ref{fig:flow-diagram-formal} pay attention to
+the row swapping section. There is obviously some useless repetition carrying
+over from checking the possibility of doing a row swap at all, more importantly
+it introduces a hanging terminating condition (which shouldn't resolve but is
+still considered bad practice). It is better to remove it all together and
+adjust it so that the improved \ref{fig:flow-diagram-formal-1}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=.9\textheight]{row-reduction-diagram-formal.png}
+  \caption{Formalized diagram of the previous row reduction algorithm implementation.}
+  \label{fig:flow-diagram-formal}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-1.png}
+  \caption{Formalized diagram of the previous row reduction algorithm implementation.}
+  \label{fig:flow-diagram-formal-1}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-2.png}
+  \caption{Formalized diagram of the previous row reduction algorithm implementation.}
+  \label{fig:flow-diagram-formal-2}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-3.png}
+  \caption{Formalized diagram of the previous row reduction algorithm implementation.}
+  \label{fig:flow-diagram-formal-3}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-4.png}
+  \caption{Formalized diagram of the previous row reduction algorithm implementation.}
+  \label{fig:flow-diagram-formal-4}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=.9\textheight]{row-reduction-diagram-formal-5.png}
+  \caption{Formalized diagram of the previous row reduction algorithm implementation.}
+  \label{fig:flow-diagram-formal-5}
+\end{figure}
+
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_reduction(int m, int n, float M[m][n]) {
+    int oi = 0;
+    int oj = 0;
+    while (oi < m && oj < n) {
+      // Pivot index
+      int pi = oi;
+      while (M[pi][oj] == 0.0) {
+        if (pi < m) {
+          pi = pi + 1;
+        }
+        else {
+          oj = oj + 1;
+          if (oj < n) {
+            pi = oi;
+          }
+          else {
+            return;
+          }
+        }
+      }
+      // Normalize
+      for (int j = oj; j < m; j = j + 1) {
+        M[pi][j] = M[pi][j] / M[pi][oj];
+      }
+      // Clip
+      for (int i = pi; i < m; i = i + 1) {
+        for (int j = oj; j < n; j = j + 1) {
+          M[i][j] = M[i][j] - M[i][oj]*M[pi][j];
+        }
+      }
+      if (pi != oi) {
+        float tmp = 0.0;
+        // Starts swapping from the offset because
+        // entries preceding it are equal to zero
+        // amongst previous rows.
+        for (int j = oj; j < m; j = j + 1) {
+          tmp = M[oi][j];
+          M[oi][j] = M[pi][j];
+          M[pi][j] = tmp;
+        }
+      }
+      oi = oi + 1;
+      oj = oj + 1;
+    }
+  }
+\end{minted}
+
+\pagebreak
+
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_reduction(const int m, const int n, float M[m][n]) {
+    for (
+      // Offset row, offset column and pivot row.
+      int oi = 0, oj = 0, pi = oi;
+      (oi < m && oj < n);
+      {oi++; oj++; pi = oi;}
+    ) {
+      // Find pivot row.
+      while (M[pi][oj] == 0.0) {
+        if (pi < m - 1) {
+          pi++;
+        }
+        else if (oj < n - 1) {
+          pi = oi;
+          oj++;
+        }
+        else {
+          return;
+        }
+      }
+      // Normalize pivot row.
+      row_scale(n - oj, M[pi] + oj, 1/M[pi][oj]);
+      // Clip offset column using pivot row as a mask.
+      for (int i = pi + 1; i < m; i++) {
+        row_add(n - oj, M[i] + oj, M[pi] + oj, -M[i][oj]);
+      }
+      // Swap pivot row with offset row.
+      if (pi != oi) {
+        row_swap(n - oj, M[oi] + oj, M[pi] + oj);
+      }
+    }
+    return;
+    /*
+       [NOTES]
+       --------------------------------------
+       Everything preceding the offset during
+       matrix triangularization is such that:
+       1) It doesn't change further steps.
+       2) It isn't changed by further steps.
+       --------------------------------------
+       therefore it is completely ignored by
+       offsetting the matrices index.
+       --------------------------------------
+    */
+  }
+\end{minted}
+
+\section{Biblio}
+\begin{itemize}
+\item ``Informatica: Fondamenti Culturali e Tecnologici 1986'' by \textit{Michele Pellerey}
+\item ``Introduction to Algorithms (third edition) 2009'' by \textit{Thomas H. Cormen}
+\end{itemize}
+
+\end{document}
