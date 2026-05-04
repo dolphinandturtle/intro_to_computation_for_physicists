@@ -1,5 +1,9 @@
 all:
 	make document
+	make code
+
+code:
+	mkdir -p build/bin/
 	gcc -o build/bin/lesson0 src/c/lesson0.c
 
 document:
