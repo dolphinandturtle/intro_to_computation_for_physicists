@@ -1,0 +1,36 @@
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_reduction(int m, int n, float M[m][n]) {
+    int oi = 0;
+    int oj = 0;
+    main:
+    if (M[oi][oj] != 0) {
+      reduction:
+      row_scale(n, M, 1/M[oi][oj]);
+      for (int i = oi + 1; i < m; i = i + 1) {
+        row_sub(n, M[i], M[oi], M[i][oj]);
+      }
+      if (oi < m) {
+        oi = oi + 1;
+        goto main;
+      }
+      else {
+        return;
+      }
+    }
+    else {
+      if (exists_row_nonzero(m, n, M)) {
+        row_swap_nearest_zero(m, n, M);
+        goto reduction;
+      }
+      else {
+        if (oj < n) {
+          oj = oj + 1;
+          goto main;
+        }
+        else {
+          return;
+        }
+      }
+    }
+  }
+\end{minted}

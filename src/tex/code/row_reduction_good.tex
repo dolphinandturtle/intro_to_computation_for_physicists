@@ -1,0 +1,46 @@
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void row_reduction(const int m, const int n, float M[m][n]) {
+    for (
+      int oi = 0, oj = 0, pi = oi;
+      (oi < m && oj < n);
+      {oi++; oj++; pi = oi;}
+    ) {
+      // Find pivot row.
+      while (M[pi][oj] == 0.0) {
+        if (pi < m - 1) {
+          pi++;
+        }
+        else if (oj < n - 1) {
+          pi = oi;
+          oj++;
+        }
+        else {
+          return;
+        }
+      }
+      // Normalize pivot row.
+      row_scale(n - oj, M[pi] + oj, 1/M[pi][oj]);
+      // Clip offset column using pivot row as a mask.
+      for (int i = pi + 1; i < m; i++) {
+        row_add(n - oj, M[i] + oj, M[pi] + oj, -M[i][oj]);
+      }
+      // Swap pivot row with offset row.
+      if (pi != oi) {
+        row_swap(n - oj, M[oi] + oj, M[pi] + oj);
+      }
+    }
+    return;
+    /*
+       [NOTES]
+       --------------------------------------
+       Everything preceding the offset during
+       matrix triangularization is such that:
+       1) It doesn't change further steps.
+       2) It isn't changed by further steps.
+       --------------------------------------
+       therefore it is completely ignored by
+       offsetting the matrices index.
+       --------------------------------------
+    */
+  }
+\end{minted}

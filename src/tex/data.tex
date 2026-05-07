@@ -1,0 +1,116 @@
+\section{Data representation and ordering}
+\subsection{Scope and pointers}
+\paragraph{FAQ}
+\begin{itemize}
+\item What are pointers? An integer type.
+\item What do pointers do? I don't know, whatever you want your integers to do.
+\item What uses pointers? Referencing and de-referencing operators.
+\item What does (de-)referencing do? Allows you to access parallel scopes.
+\item What is a scope? A device mounted on top of a rifle.
+\end{itemize}
+\paragraph{Scope}
+Up until this point we overlooked the idea of scope.
+In the C-language a scope is denoted by the curly braces enclosure.
+
+\begin{minted}[bgcolor=mygreen!10]{c}
+  {
+    int a = 10;
+    int a = 23;
+    printf("%d\n", a);
+    // error there are to many 'a'
+  }
+
+  {
+    int a = 10;
+    {
+      int a = 23;
+      printf("%d\n", a);
+      // shows 23 on terminal
+    }
+    printf("%d\n", a);
+    // shows 10 on terminal
+  }
+
+  {
+    int a = 10;
+    {
+      int b = 67;
+      printf("%d\n", a);
+      // shows 10 on terminal
+    }
+    printf("%d\n", b);
+    // error there is no such b
+  }
+\end{minted}
+
+What happens when I call a function? Why does this happen?
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void funny(int a) {
+    a = 67;
+    return;
+  }
+
+  int main(void) {
+    int a = 10;
+    funny(a);
+    printf("%d\n", a);
+    // shows 10 on terminal
+    return 0;
+  }
+\end{minted}
+Lets observe the scope, this is what happens when we call a function
+\begin{minted}[bgcolor=mygreen!10]{c}
+  funny:
+  {
+    int a = 10;
+    a = 67;
+    goto _return;
+  }
+
+  {
+    int a = 10;
+    goto funny;
+    return:
+    printf("%d\n", a);
+  }
+\end{minted}
+
+What about a pointer?
+What happens when I call a function? Why does this happen?
+\begin{minted}[bgcolor=mygreen!10]{c}
+  void funny(int* a) {
+    *a = 67;
+    return;
+  }
+
+  int main(void) {
+    int a = 10;
+    funny(&a);
+    printf("%d\n", a);
+    // shows 10 on terminal
+    return 0;
+  }
+\end{minted}
+\begin{minted}[bgcolor=mygreen!10]{c}
+  funny:
+  {
+    int* a = &a;
+    *a = 67;
+    goto _return;
+  }
+
+  {
+    int a = 10;
+    goto funny;
+    return:
+    printf("%d\n", 67);
+  }
+\end{minted}
+
+Couldn't I just return 'a' instead? Yes but what if you want to change more than one variable?
+
+
+\subsection{Arrays}
+\subsection{Integers}
+\subsection{Decimals}
+\subsection{Fixed point and floating point}

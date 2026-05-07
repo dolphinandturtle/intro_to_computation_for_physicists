@@ -1,0 +1,52 @@
+\section{Introduction}
+\paragraph{Installation}
+Create a file on your computer named ``main.c'',
+inside your are going to write the following:
+\begin{minted}[bgcolor=mygreen!10]{c}
+  #include <stdio.h>
+
+  int main(void) {
+    printf("Hello Seamen!\n");
+    return 0;
+  }
+\end{minted}
+now open a \textit{terminal/shell} of your choice
+to \textit{compile} and \textit{run} the ``main.c''
+file with the following:
+\begin{minted}[bgcolor=mygreen!10]{bash}
+  # I am on Linux and use 'gcc' depending
+  # on your operating system you may need
+  # to use something else.
+  gcc -o main.c main
+  ./main
+\end{minted}
+if the phrase ``Hello Seamen!'' appeared on your
+terminal its good, you can move to the next paragraph.
+If nothing happened make sure everything has been properly
+written, if an error occurs \textit{google} ``How to install
+C compiler on Windows/Mac/Linux'' or ask a trusted friend to
+do so for you. Repeat this process until the
+desired result has been reached.
+
+\paragraph{Pre-requisites}
+In order to move to the next chapter it is required
+to understand the behaviour of the following program
+without any external help:
+\begin{minted}[bgcolor=mygreen!10]{c}
+  // 'int' is an abbreviation for integer
+  // '=' is an assignment, translate it with 'set to'
+  int factorial(int n) {
+    int x = 1;
+    loop:
+    if (n > 0) {
+      x = x * n;
+      n = n - 1;
+      goto loop;
+    }
+    else {
+      return x;
+    }
+  }
+\end{minted}
+Can you guess the \textit{return} value of $x$ if $n = 5$?
+If you understood the code correctly it should be $x = 120$.

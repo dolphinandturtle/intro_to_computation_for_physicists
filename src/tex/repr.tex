@@ -1,0 +1,188 @@
+\section{Program representation}
+
+\subsection{Flow diagram representation}
+The rules for the representation of a flow diagram are the following,
+right after, a familiar diagram is shown.
+\begin{itemize}
+\item Circles indicate insertion and termination points,
+  respectively named ``start'' and ``end''.
+\item Slanted parallelograms indicate insertion variables
+  also known as \textbf{input} and termination variables also
+  know as \textbf{output}.
+\item Rhombi are \textbf{conditionals} their \underline{exit flow is not fixed},
+  its a function of their inner state.
+  For our purposes the possible exit flows are \textit{two}, one if the condition
+  \underline{is} satisfied and another one if it \underline{is not}.
+\item Rectangles are \textbf{procedures}, their \underline{exit flow is fixed}.
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{flow-diagram-example.png}
+  \caption{
+    This is the flow diagram of the ``factorial'' program
+    previously shown.
+  }
+  \label{fig:flow-diagram-example}
+\end{figure}
+
+\pagebreak
+
+\subsection{Procedural representation}
+The ordering given by arrows is now replaced 
+There are no more arrows, each line is executed in order
+from top to bottom up until an \textit{indirection} command
+such as ``GOTO'' which diverts the next execution to a
+special line marked with a ``FLAG'' statement. This is a
+typical scheme for how computers execute code.
+\begin{minted}[bgcolor=mygreen!10]{text}
+  START n
+  SETTO x 1
+  FLAG LOOP
+  IFSTART GREATERTHAN n 0
+  SETTO x PRODUCT x n
+  SETTO n SUBTRACTION n 1
+  GOTO LOOP
+  IFSTOP
+  ELSESTART
+  STOP x
+  ELSESTOP
+\end{minted}
+
+\pagebreak
+
+\subsection{Flow patterns}
+The flow of a program is a very important aspect to understand its behaviour,
+all useful programs have a source-sink aspect to them, all arrows begin from
+a source and they must all end in a sink at some point.
+
+\noindent
+\begin{minipage}{0.5\textwidth}
+  \vspace{1cm}
+  \includegraphics[width=\textwidth]{flow-if-else.png}
+  \captionof{figure}{This is an \textbf{if-else} pattern, it starts from $C$.}
+  \label{fig:flow-if-else}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.4\textwidth}
+  The \textit{if-else} pattern \underline{conserves} the tree structure of the program.
+  If $1$ and $2$ are halting programs than the whole tree will halt.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    if (C) {
+      // 1
+    }
+    else {
+      // 2
+    }
+  \end{minted}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.4\textwidth}
+  \vspace{1cm}
+  The \textit{if-elseif} pattern is a pattern extension of the \textit{if-else} pattern.
+  It \underline{conserves} the tree structure of the program.
+  If $1 \cdots n$ are halting programs than the whole tree will halt.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    if (1) {
+      // 1
+    }
+    else if (...) {
+      // ...
+    }
+    else {
+      // N
+    }
+  \end{minted}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{flow-if-elseif.png}
+  \captionof{figure}{This is an \textbf{if-elseif} pattern, it starts from $C$.}
+  \label{fig:flow-if-elseif}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.5\textwidth}
+  \vspace{1cm}
+  \includegraphics[width=\textwidth]{flow-if.png}
+  \captionof{figure}{This is a free \textbf{if} pattern, it starts from $C$.}
+  \label{fig:flow-if}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.4\textwidth}
+  The \textit{free if} pattern is a \underline{reduction} of an \textit{if-else} pattern.
+  If $1 \otimes 2$ and $2$ halts than the whole tree will halt
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    if (C) {
+      // 1
+    }
+    // 2
+  \end{minted}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.4\textwidth}
+  \vspace{1cm}
+  The \textit{while} pattern is guaranteed to halt
+  if the condition $C$ has an \textit{upper-bound}
+  check as a logical conjunction and is a function
+  of a \textit{strictly increasing} value (the same
+  is true for a lower-bound with a stricly decreasing
+  value).
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    while (C) {
+      // B
+    }
+  \end{minted}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{flow-while.png}
+  \captionof{figure}{This is \textbf{while} pattern, it starts from $C$.}
+  \label{fig:flow-while}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.5\textwidth}
+  \vspace{1cm}
+  \includegraphics[width=\textwidth]{flow-do-while.png}
+  \captionof{figure}{This is a \textbf{do-while} pattern, it starts from $C$.}
+  \label{fig:flow-do-while}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.4\textwidth}
+  The \textit{do-while} pattern exhibits the same
+  halting behaviour as the \textit{while} pattern;
+  the difference is that the \textit{body} of the
+  loop $B$ will always resolve \underline{at least}
+  once.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    do {
+      // B
+    } while (C);
+  \end{minted}
+\end{minipage}
+
+\noindent
+\begin{minipage}{0.4\textwidth}
+  \vspace{1cm}
+  The \textit{for} pattern exhibits the same
+  halting behaviour as the \textit{while} pattern;
+  in addition if $C \otimes B = C \oplus B$ then
+  the strictly increasing/decreasing value is
+  controlled by $IT$.
+  \begin{minted}[bgcolor=mygreen!10]{c}
+    for (IN; C; IT) {
+      // B
+    }
+  \end{minted}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{flow-for.png}
+  \captionof{figure}{This is \textbf{for} pattern, it starts from $IN$.}
+  \label{fig:flow-for}
+\end{minipage}
+
+\paragraph{Reductions}
